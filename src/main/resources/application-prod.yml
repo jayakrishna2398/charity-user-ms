@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://charityapp-prod.cwnjiz1ppgaw.ap-south-1.rds.amazonaws.com:3306/charityapp_user_db
+    username: prod_user
+    password: prod_user
