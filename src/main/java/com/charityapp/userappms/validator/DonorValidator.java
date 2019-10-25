@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.charityapp.userappms.dto.LoginDTO;
+import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ValidatorException;
 import com.charityapp.userappms.model.Donor;
 import com.charityapp.userappms.repository.DonorRepository;
@@ -35,13 +36,17 @@ public class DonorValidator {
 		}
 	}
 	
-	public void donorRegisterValidator(Donor donor) throws ValidatorException
+	public void donorRegisterValidator(RegisterDTO registerDTO) throws ValidatorException
 	{
-		String email = donor.getEmail();
-		String password = donor.getPassword();
+		String email = registerDTO.getEmail();
+		String password = registerDTO.getPassword();
+		String name = registerDTO.getName();
 		
 		
-		
+		if(StringUtils.isEmpty(name))
+		{
+			throw new ValidatorException(MessageConstant.INVALID_EMAIL);
+		}
 		if(StringUtils.isEmpty(email))
 		{
 			throw new ValidatorException(MessageConstant.INVALID_EMAIL);

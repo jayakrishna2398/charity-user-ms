@@ -52,12 +52,13 @@ public class DonorController {
 			@ApiResponse(code = 400, message = MessageConstant.INVALID_CREDENTIAL, response = Message.class) })
 	public ResponseEntity<Object> donorRegister(@RequestBody RegisterDTO registerDTO) {
 		Donor donorResponseObj = null;
-
-		donorResponseObj = donorService.donorRegister(registerDTO);
-		if (donorResponseObj != null) {
+		String errorMessage = null;
+		try {
+			donorResponseObj = donorService.donorRegister(registerDTO);
 			return new ResponseEntity<>(donorResponseObj, HttpStatus.OK);
-		} else {
-			Message message = new Message(MessageConstant.REGISTER_FAILED);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}

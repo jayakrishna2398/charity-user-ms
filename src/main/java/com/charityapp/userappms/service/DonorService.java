@@ -46,18 +46,29 @@ public class DonorService {
 	}
 
 	@Transactional
-	public Donor donorRegister(final RegisterDTO registerDTO) {
+	public Donor donorRegister(final RegisterDTO registerDTO) throws ServiceException {
 		Donor donorResponseObj = null;
-		Donor donorObj =new Donor();
-		donorObj.setName(registerDTO.getName());
-		donorObj.setEmail(registerDTO.getEmail());
-		donorObj.setPassword(registerDTO.getPassword());
-		donorResponseObj = donorRepoObj.save(donorObj);
-		//Mail service
-		MailDTO mailDTO = new MailDTO();
-		mailDTO.setName(registerDTO.getName());
-		mailDTO.setEmail(registerDTO.getEmail());
-		mailService.sendMail(mailDTO);
+		
+		try {
+			Donor donorObj =new Donor();
+			donorObj.setName(registerDTO.getName());
+			donorObj.setEmail(registerDTO.getEmail());
+			donorObj.setPassword(registerDTO.getPassword());
+			donorValidator.donorRegisterValidator(registerDTO);
+			donorResponseObj = donorRepoObj.save(donorObj);
+			//Mail service
+			MailDTO mailDTO = new MailDTO();
+			mailDTO.setName(registerDTO.getName());
+			mailDTO.setEmail(registerDTO.getEmail());
+			mailService.sendMail(mailDTO);
+			if(donorResponseObj == null)
+			{
+				throw new ServiceException(MessageConstant.REGISTER_FAILED);
+			}
+		} catch (ValidatorException e) {
+			throw new ServiceException(e.getMessage());		
+		}		
+		
 		return donorResponseObj;
 	}
 	
