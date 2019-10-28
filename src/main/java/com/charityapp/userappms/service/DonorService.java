@@ -63,7 +63,7 @@ public class DonorService {
 			mailService.sendMail(mailDTO);
 			if(donorResponseObj == null)
 			{
-				throw new ServiceException(MessageConstant.REGISTER_FAILED);
+				throw new ServiceException(MessageConstant.REGISTERATION_FAILED);
 			}
 		} catch (ValidatorException e) {
 			throw new ServiceException(e.getMessage());		
@@ -76,5 +76,12 @@ public class DonorService {
 	{
 		return donorRepoObj.findById(id)
 		        .orElseThrow(() -> new EntityNotFoundException("ID not found"));
+	}
+	//Forget password
+	public Donor findByEmail(final String email)
+	{
+		Donor donorResponse = null;
+		donorResponse = donorRepoObj.findByEmail(email);
+		return donorResponse;
 	}
 }
