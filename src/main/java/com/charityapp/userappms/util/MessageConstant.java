@@ -11,4 +11,6 @@ public final class MessageConstant {
 	public static final String INVALID_PASSWORD = "Invalid Password";
 	public static final String EMAIL_EXIST = "Email is exist";
 	public static final String INVALID_USERNAME = "Invalid username";
+	public static final String ADMIN_DETAILS_NOT_AVAILABLE = "Admin details not available";
+	public static final String ADMIN_DETAILS_AVAILABLE = "Admin details available";
 }

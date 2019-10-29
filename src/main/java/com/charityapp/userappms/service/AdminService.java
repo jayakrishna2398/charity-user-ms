@@ -1,9 +1,9 @@
 package com.charityapp.userappms.service;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,6 @@ public class AdminService {
 	AdminValidator validator;
 	@Autowired
 	private MailService mailService;
-//	Logger logger = LoggerFactory.getLogger(AdminService.class);
 	
 	public Admin adminLogin(final LoginDTO loginDTO) throws ServiceException {
 		Admin adminResponseObj = null;
@@ -40,7 +39,6 @@ public class AdminService {
 			}
 		} catch(ValidatorException e)
 		{
-//			logger.warn("ValidatorException"+e.getMessage(), e);
 			throw new ServiceException(e.getMessage());
 		}
 		return adminResponseObj;
@@ -67,9 +65,20 @@ public class AdminService {
 		return adminResponseObj;
 	}
 	
-	public Admin findById(Integer id)
+	public Admin findById(final Integer id)
 	{
 		return adminRepoObj.findById(id)
 		        .orElseThrow(() -> new EntityNotFoundException("ID not found"));
+	}
+	
+	public List<Admin> listAdminDetails() throws ServiceException
+	{
+		List<Admin> list = null;
+		list = adminRepoObj.findAll();
+		if(list == null)
+		{
+			throw new ServiceException(MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE);
+		}
+		return list;
 	}
 }

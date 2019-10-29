@@ -1,5 +1,7 @@
 package com.charityapp.userappms.controller;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,5 +110,25 @@ public class AdminController {
 			isValid = false;
 		}
 		return isValid;
+	}
+	
+	@GetMapping("/list")
+	@ApiOperation("List Admin Details")
+	@ApiResponses(value= {
+			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Admin.class),
+			@ApiResponse(code = 400, message  = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Message.class)
+	})
+	public ResponseEntity<Object> listAdminDetails()
+	{
+		List<Admin> list = null;
+		String errorMessage = null;
+		try {
+			list = adminServiceObj.listAdminDetails();
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
 	}
 }
