@@ -2,8 +2,8 @@ package com.charityapp.userappms.service;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class AdminService {
 	@Autowired
 	private AdminRepository adminRepoObj;
 	@Autowired AdminValidator validator;
-	Logger logger = LoggerFactory.getLogger(AdminService.class);
+//	Logger logger = LoggerFactory.getLogger(AdminService.class);
 	
 	public Admin adminLogin(final LoginDTO loginDTO) throws ServiceException {
 		Admin adminResponseObj = null;
@@ -36,7 +36,7 @@ public class AdminService {
 			}
 		} catch(ValidatorException e)
 		{
-			logger.warn("ValidatorException"+e.getMessage(), e);
+//			logger.warn("ValidatorException"+e.getMessage(), e);
 			throw new ServiceException(e.getMessage());
 		}
 		return adminResponseObj;

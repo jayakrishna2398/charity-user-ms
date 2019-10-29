@@ -1,5 +1,7 @@
 package com.charityapp.userappms.controller;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,18 +66,18 @@ public class DonorController {
 		}
 	}
 
-	@GetMapping("/list/{id}")
+	@GetMapping("/{id}")
 	@ApiOperation("Find By Id")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Donor.class),
 			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class) })
 	public ResponseEntity<Object> findById(@PathVariable int id) {
 		Donor donorResponseObj = null;
-
-		donorResponseObj = donorService.findById(id);
-		if (donorResponseObj != null) {
+		try {
+			donorResponseObj = donorService.findById(id);
 			return new ResponseEntity<>(donorResponseObj, HttpStatus.OK);
-		} else {
+		} catch(EntityNotFoundException e)
+		{
 			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}

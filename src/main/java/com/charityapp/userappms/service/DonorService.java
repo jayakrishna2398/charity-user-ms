@@ -1,6 +1,5 @@
 package com.charityapp.userappms.service;
 
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +32,11 @@ public class DonorService {
 			String email = loginDTO.getEmail();
 			String password = loginDTO.getPassword();
 			donorValidator.donorLoginValidator(loginDTO);
-			donorResponseObj = donorRepoObj.findByEmailAndPassword(email,password);
-			if(donorResponseObj == null)
-			{
+			donorResponseObj = donorRepoObj.findByEmailAndPassword(email, password);
+			if (donorResponseObj == null) {
 				throw new ServiceException(MessageConstant.INVALID_CREDENTIAL);
 			}
-		} catch(ValidatorException e)
-		{
+		} catch (ValidatorException e) {
 			throw new ServiceException(e.getMessage());
 		}
 		return donorResponseObj;
@@ -48,38 +45,35 @@ public class DonorService {
 	@Transactional
 	public Donor donorRegister(final RegisterDTO registerDTO) throws ServiceException {
 		Donor donorResponseObj = null;
-		
+
 		try {
-			Donor donorObj =new Donor();
+			Donor donorObj = new Donor();
 			donorObj.setName(registerDTO.getName());
 			donorObj.setEmail(registerDTO.getEmail());
 			donorObj.setPassword(registerDTO.getPassword());
 			donorValidator.donorRegisterValidator(registerDTO);
 			donorResponseObj = donorRepoObj.save(donorObj);
-			//Mail service
+			// Mail service
 			MailDTO mailDTO = new MailDTO();
 			mailDTO.setName(registerDTO.getName());
 			mailDTO.setEmail(registerDTO.getEmail());
 			mailService.sendMail(mailDTO);
-			if(donorResponseObj == null)
-			{
+			if (donorResponseObj == null) {
 				throw new ServiceException(MessageConstant.REGISTERATION_FAILED);
 			}
 		} catch (ValidatorException e) {
-			throw new ServiceException(e.getMessage());		
-		}		
-		
+			throw new ServiceException(e.getMessage());
+		}
+
 		return donorResponseObj;
 	}
-	
-	public Donor findById(Integer id)
-	{
-		return donorRepoObj.findById(id)
-		        .orElseThrow(() -> new EntityNotFoundException("ID not found"));
+
+	public Donor findById(Integer id) {
+		return donorRepoObj.findById(id).orElseThrow(() -> new EntityNotFoundException("ID not found"));
 	}
-	//Forget password
-	public Donor findByEmail(final String email)
-	{
+
+	// Forget password
+	public Donor findByEmail(final String email) {
 		Donor donorResponse = null;
 		donorResponse = donorRepoObj.findByEmail(email);
 		return donorResponse;

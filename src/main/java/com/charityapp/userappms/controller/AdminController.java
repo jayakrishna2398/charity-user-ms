@@ -1,8 +1,11 @@
 package com.charityapp.userappms.controller;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,20 +72,41 @@ public class AdminController {
 		}
 	}
 	
-	@PostMapping("/list/{id}")
+	@PostMapping("/{id}")
 	@ApiOperation("Find by id")
 	@ApiResponses(value={
 			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Admin.class),
 			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class)
 	})
-	public ResponseEntity<Object> forgetPassword(@PathVariable int id) {
+	public ResponseEntity<Object> findById(@PathVariable int id) {
 		Admin adminResponseObj = null;
-		adminResponseObj = adminServiceObj.findById(id);
-		if (adminResponseObj != null) {
+		try
+		{
+			adminResponseObj = adminServiceObj.findById(id);
 			return new ResponseEntity<>(adminResponseObj, HttpStatus.OK);
-		} else {
+		} catch(EntityNotFoundException e)
+		{
 			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@GetMapping("/{id}/validate")
+	@ApiOperation("Validate admin")
+	@ApiResponses(value= {
+			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Boolean.class),
+			@ApiResponse(code = 400, message  = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Boolean.class)
+	})
+	public Boolean validateAdmin(@PathVariable int id)
+	{
+		Boolean isValid = true;
+		try {
+			adminServiceObj.findById(id);
+		}
+		catch(EntityNotFoundException e)
+		{
+			isValid = false;
+		}
+		return isValid;
 	}
 }
