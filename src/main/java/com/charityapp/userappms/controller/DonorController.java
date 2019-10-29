@@ -35,6 +35,11 @@ public class DonorController {
 	@Autowired
 	DonorService donorService;
 
+	/**
+	 * User login
+	 * @param email and password
+	 * @return user details if login success or else invalid credential.
+	 * **/
 	@PostMapping("/login")
 	@ApiOperation("Donor Login")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = Donor.class),
@@ -52,6 +57,11 @@ public class DonorController {
 		}
 	}
 
+	/**
+	 * User register
+	 * @param name,email, and password
+	 * @return user details if register success or else invalid credential.
+	 * **/
 	@PostMapping("/register")
 	@ApiOperation("Donor Register")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = Donor.class),
@@ -69,6 +79,11 @@ public class DonorController {
 		}
 	}
 
+	/**
+	 * Display user details based on id
+	 * @param id
+	 * @return user details if id is exist or else user details not available.
+	 * **/
 	@GetMapping("/{id}")
 	@ApiOperation("Find By Id")
 	@ApiResponses(value = {
@@ -86,6 +101,11 @@ public class DonorController {
 		}
 	}
 
+	/**
+	 * forget password
+	 * @param email
+	 * @return user password if email is exist or else user details not available.
+	 * **/
 	@PostMapping("/forgetpassword")
 	@ApiOperation("Forget password")
 	@ApiResponses(value = {
@@ -102,6 +122,10 @@ public class DonorController {
 		}
 	}
 	
+	/**
+	 * List user details
+	 * @return user details until get an exception or else user details not available.
+	 * **/
 	@GetMapping("/list")
 	@ApiOperation("List Donor Details")
 	@ApiResponses(value= {

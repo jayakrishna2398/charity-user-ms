@@ -33,6 +33,11 @@ public class AdminController {
 	@Autowired
 	private AdminService adminServiceObj;
 
+	/**
+	 * Admin login
+	 * @param email and password
+	 * @return admin details if login success or else invalid credential.
+	 * **/
 	@PostMapping("/login")
 	@ApiOperation("Admin Login")
 	@ApiResponses(value = { 
@@ -53,7 +58,11 @@ public class AdminController {
 		}
 
 	}
-	
+	/**
+	 * Admin register
+	 * @param name,email, and password
+	 * @return admin details if register success or else invalid credential.
+	 * **/
 	@PostMapping("/register")
 	@ApiOperation("Admin Register")
 	@ApiResponses(value={
@@ -73,12 +82,16 @@ public class AdminController {
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+	/**
+	 * Display admin details based on id
+	 * @param id
+	 * @return admin details if id is exist or else admin details not available.
+	 * **/
 	@PostMapping("/{id}")
-	@ApiOperation("Find by id")
+	@ApiOperation("Find By Id")
 	@ApiResponses(value={
-			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Admin.class),
-			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class)
+			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Admin.class),
+			@ApiResponse(code = 400, message = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Message.class)
 	})
 	public ResponseEntity<Object> findById(@PathVariable int id) {
 		Admin adminResponseObj = null;
@@ -93,11 +106,16 @@ public class AdminController {
 		}
 	}
 	
+	/**
+	 * Validate admin based on id
+	 * @param id
+	 * @return admin details if id is exist or else admin details not available.
+	 * **/
 	@GetMapping("/{id}/validate")
-	@ApiOperation("Validate admin")
+	@ApiOperation("Validate Admin")
 	@ApiResponses(value= {
-			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Boolean.class),
-			@ApiResponse(code = 400, message  = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Boolean.class)
+			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Boolean.class),
+			@ApiResponse(code = 400, message  = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Boolean.class)
 	})
 	public Boolean validateAdmin(@PathVariable int id)
 	{
@@ -111,7 +129,10 @@ public class AdminController {
 		}
 		return isValid;
 	}
-	
+	/**
+	 * List admin details
+	 * @return admin details until get an exception or else admin details not available.
+	 * **/
 	@GetMapping("/list")
 	@ApiOperation("List Admin Details")
 	@ApiResponses(value= {
