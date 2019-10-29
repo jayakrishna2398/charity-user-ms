@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.charityapp.userappms.dto.LoginDTO;
+import com.charityapp.userappms.dto.MailDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.exception.ValidatorException;
@@ -20,7 +21,10 @@ import com.charityapp.userappms.validator.AdminValidator;
 public class AdminService {
 	@Autowired
 	private AdminRepository adminRepoObj;
-	@Autowired AdminValidator validator;
+	@Autowired 
+	AdminValidator validator;
+	@Autowired
+	private MailService mailService;
 //	Logger logger = LoggerFactory.getLogger(AdminService.class);
 	
 	public Admin adminLogin(final LoginDTO loginDTO) throws ServiceException {
@@ -51,6 +55,11 @@ public class AdminService {
 			adminObj.setPassword(registerDTO.getPassword());
 			validator.registerValidator(registerDTO);
 			adminResponseObj = adminRepoObj.save(adminObj);
+			// Mail service
+			MailDTO mailDTO = new MailDTO();
+			mailDTO.setName(registerDTO.getName());
+			mailDTO.setEmail(registerDTO.getEmail());
+			mailService.sendMail(mailDTO);
 		} catch (ValidatorException e) {
 			throw new ServiceException(e.getMessage());
 		}
