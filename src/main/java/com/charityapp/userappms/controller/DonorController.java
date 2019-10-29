@@ -1,5 +1,7 @@
 package com.charityapp.userappms.controller;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ServiceException;
+import com.charityapp.userappms.model.Admin;
 import com.charityapp.userappms.model.Donor;
 import com.charityapp.userappms.service.DonorService;
 import com.charityapp.userappms.util.Message;
@@ -95,6 +98,26 @@ public class DonorController {
 			return new ResponseEntity<>(donorResponseObj, HttpStatus.OK);
 		} else {
 			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/list")
+	@ApiOperation("List Donor Details")
+	@ApiResponses(value= {
+			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Admin.class),
+			@ApiResponse(code = 400, message  = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class)
+	})
+	public ResponseEntity<Object> listDonorDetails()
+	{
+		List<Donor> list = null;
+		String errorMessage = null;
+		try {
+			list = donorService.listDonorDetails();
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}

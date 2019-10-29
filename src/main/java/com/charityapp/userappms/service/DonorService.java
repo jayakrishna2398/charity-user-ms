@@ -1,11 +1,12 @@
 package com.charityapp.userappms.service;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.MailDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
@@ -77,5 +78,15 @@ public class DonorService {
 		Donor donorResponse = null;
 		donorResponse = donorRepoObj.findByEmail(email);
 		return donorResponse;
+	}
+	public List<Donor> listDonorDetails() throws ServiceException
+	{
+		List<Donor> list = null;
+		list = donorRepoObj.findAll();
+		if(list == null)
+		{
+			throw new ServiceException(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
+		}
+		return list;
 	}
 }
