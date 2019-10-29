@@ -1,15 +1,20 @@
 package com.charityapp.userappms.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ValidatorException;
+import com.charityapp.userappms.model.Admin;
+import com.charityapp.userappms.repository.AdminRepository;
 import com.charityapp.userappms.util.MessageConstant;
 
 @Component
 public class AdminValidator {
 	
+	@Autowired
+	private AdminRepository adminRepo;
 	/**
 	 * Get instance of donor validator class 
 	**/
@@ -46,5 +51,13 @@ public class AdminValidator {
 		{
 			throw new ValidatorException(MessageConstant.INVALID_PASSWORD);
 		}
+		
+		//Prepare get donor details based on email
+				Admin adminResponseObj = adminRepo.findByEmail(email);
+				
+				if(adminResponseObj != null)
+				{
+					throw new ValidatorException(MessageConstant.EMAIL_EXIST);
+				}
 	}
 }
