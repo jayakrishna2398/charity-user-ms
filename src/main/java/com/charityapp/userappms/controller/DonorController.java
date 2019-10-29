@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/donor")
+@RequestMapping("/user")
 public class DonorController {
 
 	@Autowired
