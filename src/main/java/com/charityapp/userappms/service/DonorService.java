@@ -82,7 +82,7 @@ public class DonorService {
 		//Prepare message and to address
 		StringBuilder sb = new StringBuilder();
 		sb.append("Dear user,");
-		sb.append("Your Password is=").append(donorResponse.getPassword());
+		sb.append("Your Password is,").append(donorResponse.getPassword());
 
 		ForgotPasswordDTO mailDTO = new ForgotPasswordDTO();
 		mailDTO.setTo(donorResponse.getEmail());
