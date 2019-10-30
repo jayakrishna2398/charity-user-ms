@@ -106,7 +106,7 @@ public class DonorController {
 	 * @param email
 	 * @return user password if email is exist or else user details not available.
 	 * **/
-	@PostMapping("/forgotpassword")
+	@GetMapping("/forgotpassword")
 	@ApiOperation("Forgot password")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Donor.class),
