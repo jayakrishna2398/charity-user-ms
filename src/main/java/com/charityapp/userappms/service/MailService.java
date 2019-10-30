@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.charityapp.userappms.dto.ForgotPasswordDTO;
 import com.charityapp.userappms.dto.MailDTO;
 
 @Service
@@ -18,6 +19,13 @@ public class MailService {
 	{
 		String apiUrl = "https://charity-notification.herokuapp.com";
 		ResponseEntity<Void> postForEntity = restTemplate.postForEntity(apiUrl+"/mail/registeruser", mailDTO, Void.class);
+		System.out.println(postForEntity);
+	}
+	//Forgot password
+	void sendMailToUser(final ForgotPasswordDTO mailDTO)
+	{
+		String apiUrl = "https://charity-notification.herokuapp.com";
+		ResponseEntity<Void> postForEntity = restTemplate.postForEntity(apiUrl+"/mail/send", mailDTO, Void.class);
 		System.out.println(postForEntity);
 	}
 }

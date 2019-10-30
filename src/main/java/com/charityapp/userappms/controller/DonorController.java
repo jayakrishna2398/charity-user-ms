@@ -102,16 +102,16 @@ public class DonorController {
 	}
 
 	/**
-	 * forget password
+	 * forgot password
 	 * @param email
 	 * @return user password if email is exist or else user details not available.
 	 * **/
-	@PostMapping("/forgetpassword")
-	@ApiOperation("Forget password")
+	@PostMapping("/forgotpassword")
+	@ApiOperation("Forgot password")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Donor.class),
 			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class) })
-	public ResponseEntity<Object> forgetPassword(@RequestParam String email) {
+	public ResponseEntity<Object> forgotPassword(@RequestParam String email) {
 		Donor donorResponseObj = null;
 		donorResponseObj = donorService.findByEmail(email);
 		if (donorResponseObj != null) {
