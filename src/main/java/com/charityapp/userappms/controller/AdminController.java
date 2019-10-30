@@ -89,7 +89,7 @@ public class AdminController {
 	 * @param id
 	 * @return admin details if id is exist or else admin details not available.
 	 * **/
-	@PostMapping("/{id}")
+	@GetMapping("/{id}")
 	@ApiOperation("Find By Id")
 	@ApiResponses(value={
 			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Admin.class),
