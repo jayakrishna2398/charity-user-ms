@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.model.Admin;
+import com.charityapp.userappms.model.Donor;
 import com.charityapp.userappms.service.AdminService;
 import com.charityapp.userappms.util.Message;
 import com.charityapp.userappms.util.MessageConstant;
@@ -149,6 +151,26 @@ public class AdminController {
 		} catch (ServiceException e) {
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+	}
+	/**
+	 * forgot password
+	 * @param email
+	 * @return user password if email is exist or else user details not available.
+	 * **/
+	@GetMapping("/forgotpassword")
+	@ApiOperation("Forgot password")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Donor.class),
+			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class) })
+	public ResponseEntity<Object> forgotPassword(@RequestParam String email) {
+		Admin adminResponseObj = null;
+		adminResponseObj = adminServiceObj.findByEmail(email);
+		if (adminResponseObj != null) {
+			return new ResponseEntity<>(adminResponseObj, HttpStatus.OK);
+		} else {
+			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}

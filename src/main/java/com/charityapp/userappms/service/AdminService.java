@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.charityapp.userappms.dto.ForgotPasswordDTO;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.MailDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
@@ -81,4 +82,21 @@ public class AdminService {
 		}
 		return list;
 	}
+	
+	// Forget password
+		public Admin findByEmail(final String email) {
+			Admin adminResponse = null;
+			adminResponse = adminRepoObj.findByEmail(email);
+			//Prepare message and to address
+			StringBuilder sb = new StringBuilder();
+			sb.append("Dear user,");
+			sb.append("Your Password is,").append(adminResponse.getPassword());
+
+			ForgotPasswordDTO mailDTO = new ForgotPasswordDTO();
+			mailDTO.setTo(adminResponse.getEmail());
+			mailDTO.setText(sb.toString());
+			//Send mail to user
+			mailService.sendMailToUser(mailDTO);
+			return adminResponse;
+		}
 }
