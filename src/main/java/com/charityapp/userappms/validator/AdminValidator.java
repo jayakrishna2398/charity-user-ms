@@ -26,11 +26,11 @@ public class AdminValidator {
 		
 		if(email == null || "".equals(email))
 		{
-			throw new ValidatorException(MessageConstant.INVALID_EMAIL);
+			throw new ValidatorException(MessageConstant.INVALID_EMAIL_OR_PASSWORD);
 		}
 		if(password == null || "".equals(password))
 		{
-			throw new ValidatorException(MessageConstant.INVALID_PASSWORD);
+			throw new ValidatorException(MessageConstant.INVALID_EMAIL_OR_PASSWORD);
 		}
 	}
 	public void registerValidator(RegisterDTO registerDTO) throws ValidatorException

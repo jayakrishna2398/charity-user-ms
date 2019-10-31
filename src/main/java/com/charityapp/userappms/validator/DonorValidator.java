@@ -26,13 +26,13 @@ public class DonorValidator {
 		
 		if(StringUtils.isEmpty(loginDTO.getEmail()))
 		{
-			throw new ValidatorException(MessageConstant.INVALID_EMAIL);
+			throw new ValidatorException(MessageConstant.INVALID_EMAIL_OR_PASSWORD);
 		}
 		
 		
 		if(StringUtils.isEmpty(loginDTO.getPassword()))
 		{
-			throw new ValidatorException(MessageConstant.INVALID_PASSWORD);
+			throw new ValidatorException(MessageConstant.INVALID_EMAIL_OR_PASSWORD);
 		}
 	}
 	

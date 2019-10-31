@@ -15,4 +15,5 @@ public final class MessageConstant {
 	public static final String ADMIN_DETAILS_AVAILABLE = "Admin details available";
 	public static final String MAIL_HAS_BEEN_SEND = "Mail has been send";
 	public static final String MAIL_HAS_BEEN_NOT_SEND = "Mail has been not send";
+	public static final String INVALID_EMAIL_OR_PASSWORD = "Invalid email or Password";
 }
