@@ -1,5 +1,6 @@
 package com.charityapp.userappms.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
+import com.charityapp.userappms.dto.UserDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.model.Admin;
-import com.charityapp.userappms.model.Donor;
 import com.charityapp.userappms.service.AdminService;
 import com.charityapp.userappms.util.Message;
 import com.charityapp.userappms.util.MessageConstant;
@@ -43,7 +44,7 @@ public class AdminController {
 	@PostMapping("/login")
 	@ApiOperation("Admin Login")
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = Admin.class),
+			@ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = UserDTO.class),
 			@ApiResponse(code = 400, message = MessageConstant.INVALID_CREDENTIAL, response = Message.class) 
 			})
 	public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
@@ -51,7 +52,11 @@ public class AdminController {
 		String errorMessage = null;
 		try {
 			adminResponseObj = adminServiceObj.adminLogin(loginDTO);
-			return new ResponseEntity<>(adminResponseObj, HttpStatus.OK);
+			UserDTO userDTO = new UserDTO();
+			userDTO.setEmail(adminResponseObj.getEmail());
+			userDTO.setName(adminResponseObj.getName());
+			userDTO.setId(adminResponseObj.getId());
+			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch(ServiceException e)
 		{
 			errorMessage = e.getMessage();
@@ -68,7 +73,7 @@ public class AdminController {
 	@PostMapping("/register")
 	@ApiOperation("Admin Register")
 	@ApiResponses(value={
-			@ApiResponse(code = 200, message = MessageConstant.REGISTRATION_SUCCESS, response = Admin.class),
+			@ApiResponse(code = 200, message = MessageConstant.REGISTRATION_SUCCESS, response = UserDTO.class),
 			@ApiResponse(code = 400, message = MessageConstant.REGISTERATION_FAILED, response = Message.class)
 	})
 	public ResponseEntity<Object> register(@RequestBody RegisterDTO registerDTO)
@@ -77,7 +82,11 @@ public class AdminController {
 		String errorMessage = null;
 		try {
 			adminResponseObj = adminServiceObj.adminRegister(registerDTO);
-			return new ResponseEntity<>(adminResponseObj, HttpStatus.OK);
+			UserDTO userDTO = new UserDTO();
+			userDTO.setEmail(adminResponseObj.getEmail());
+			userDTO.setName(adminResponseObj.getName());
+			userDTO.setId(adminResponseObj.getId());
+			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch (ServiceException e) {
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
@@ -92,7 +101,7 @@ public class AdminController {
 	@GetMapping("/{id}")
 	@ApiOperation("Find By Id")
 	@ApiResponses(value={
-			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Admin.class),
+			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = UserDTO.class),
 			@ApiResponse(code = 400, message = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Message.class)
 	})
 	public ResponseEntity<Object> findById(@PathVariable int id) {
@@ -100,7 +109,11 @@ public class AdminController {
 		try
 		{
 			adminResponseObj = adminServiceObj.findById(id);
-			return new ResponseEntity<>(adminResponseObj, HttpStatus.OK);
+			UserDTO userDTO = new UserDTO();
+			userDTO.setEmail(adminResponseObj.getEmail());
+			userDTO.setName(adminResponseObj.getName());
+			userDTO.setId(adminResponseObj.getId());
+			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch(EntityNotFoundException e)
 		{
 			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
@@ -138,16 +151,25 @@ public class AdminController {
 	@GetMapping("/list")
 	@ApiOperation("List Admin Details")
 	@ApiResponses(value= {
-			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Admin.class),
+			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = UserDTO.class),
 			@ApiResponse(code = 400, message  = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Message.class)
 	})
 	public ResponseEntity<Object> listAdminDetails()
 	{
 		List<Admin> list = null;
+		List<UserDTO> listDTO = new ArrayList<UserDTO>();
 		String errorMessage = null;
 		try {
 			list = adminServiceObj.listAdminDetails();
-			return new ResponseEntity<>(list, HttpStatus.OK);
+			for(Admin admin : list)
+			{
+				UserDTO userDTO = new UserDTO();
+				userDTO.setEmail(admin.getEmail());
+				userDTO.setName(admin.getName());
+				userDTO.setId(admin.getId());
+				listDTO.add(userDTO);
+			}
+			return new ResponseEntity<>(listDTO, HttpStatus.OK);
 		} catch (ServiceException e) {
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
@@ -162,15 +184,16 @@ public class AdminController {
 	@GetMapping("/forgotpassword")
 	@ApiOperation("Forgot password")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Donor.class),
+			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Message.class),
 			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class) })
 	public ResponseEntity<Object> forgotPassword(@RequestParam String email) {
 		Admin adminResponseObj = null;
 		adminResponseObj = adminServiceObj.findByEmail(email);
 		if (adminResponseObj != null) {
-			return new ResponseEntity<>(adminResponseObj, HttpStatus.OK);
+			Message message = new Message(MessageConstant.MAIL_HAS_BEEN_SEND);
+			return new ResponseEntity<>(message, HttpStatus.OK);
 		} else {
-			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
+			Message message = new Message(MessageConstant.MAIL_HAS_BEEN_NOT_SEND);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}

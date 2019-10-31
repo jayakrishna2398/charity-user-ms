@@ -1,6 +1,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://trainingdb.ck1ayq0lncmp.ap-south-1.rds.amazonaws.com:3306/charityapp_user_db
-    username: krishna
-    password: krishna
+    url: jdbc:mysql://devdb.charityapp.in:3306/charityapp_user_db
+    username: dev_user
+    password: dev_user
+  flyway:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://devdb.charityapp.in:3306/charityapp_user_db
+    username: dev_user
+    password: dev_user

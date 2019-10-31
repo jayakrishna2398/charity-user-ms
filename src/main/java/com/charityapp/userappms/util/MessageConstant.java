@@ -13,4 +13,6 @@ public final class MessageConstant {
 	public static final String INVALID_USERNAME = "Invalid username";
 	public static final String ADMIN_DETAILS_NOT_AVAILABLE = "Admin details not available";
 	public static final String ADMIN_DETAILS_AVAILABLE = "Admin details available";
+	public static final String MAIL_HAS_BEEN_SEND = "Mail has been send";
+	public static final String MAIL_HAS_BEEN_NOT_SEND = "Mail has been not send";
 }
