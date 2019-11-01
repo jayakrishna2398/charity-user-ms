@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.charityapp.userappms.client.EmployeeService;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.dto.UserDTO;
 import com.charityapp.userappms.exception.ServiceException;
-import com.charityapp.userappms.model.Admin;
-import com.charityapp.userappms.service.AdminService;
+import com.charityapp.userappms.model.Employee;
 import com.charityapp.userappms.util.Message;
 import com.charityapp.userappms.util.MessageConstant;
 
@@ -31,10 +31,10 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/admin")
-public class AdminController {
+public class EmployeeController {
 
 	@Autowired
-	private AdminService adminServiceObj;
+	private EmployeeService employeeServiceObj;
 
 	/**
 	 * Admin login
@@ -42,20 +42,20 @@ public class AdminController {
 	 * @return admin details if login success or else invalid credential.
 	 * **/
 	@PostMapping("/login")
-	@ApiOperation("Admin Login")
+	@ApiOperation("Employee Login")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = UserDTO.class),
 			@ApiResponse(code = 400, message = MessageConstant.INVALID_CREDENTIAL, response = Message.class) 
 			})
 	public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
-		Admin adminResponseObj = null;
+		Employee employeeResponseObj = null;
 		String errorMessage = null;
 		try {
-			adminResponseObj = adminServiceObj.adminLogin(loginDTO);
+			employeeResponseObj = employeeServiceObj.adminLogin(loginDTO);
 			UserDTO userDTO = new UserDTO();
-			userDTO.setEmail(adminResponseObj.getEmail());
-			userDTO.setName(adminResponseObj.getName());
-			userDTO.setId(adminResponseObj.getId());
+			userDTO.setEmail(employeeResponseObj.getEmail());
+			userDTO.setName(employeeResponseObj.getName());
+			userDTO.setId(employeeResponseObj.getId());
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch(ServiceException e)
 		{
@@ -71,21 +71,21 @@ public class AdminController {
 	 * @return admin details if register success or else invalid credential.
 	 * **/
 	@PostMapping("/register")
-	@ApiOperation("Admin Register")
+	@ApiOperation("Employee Register")
 	@ApiResponses(value={
 			@ApiResponse(code = 200, message = MessageConstant.REGISTRATION_SUCCESS, response = UserDTO.class),
 			@ApiResponse(code = 400, message = MessageConstant.REGISTERATION_FAILED, response = Message.class)
 	})
 	public ResponseEntity<Object> register(@RequestBody RegisterDTO registerDTO)
 	{
-		Admin adminResponseObj = null;
+		Employee employeeResponseObj = null;
 		String errorMessage = null;
 		try {
-			adminResponseObj = adminServiceObj.adminRegister(registerDTO);
+			employeeResponseObj = employeeServiceObj.adminRegister(registerDTO);
 			UserDTO userDTO = new UserDTO();
-			userDTO.setEmail(adminResponseObj.getEmail());
-			userDTO.setName(adminResponseObj.getName());
-			userDTO.setId(adminResponseObj.getId());
+			userDTO.setEmail(employeeResponseObj.getEmail());
+			userDTO.setName(employeeResponseObj.getName());
+			userDTO.setId(employeeResponseObj.getId());
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch (ServiceException e) {
 			errorMessage = e.getMessage();
@@ -101,22 +101,22 @@ public class AdminController {
 	@GetMapping("/{id}")
 	@ApiOperation("Find By Id")
 	@ApiResponses(value={
-			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = UserDTO.class),
-			@ApiResponse(code = 400, message = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Message.class)
+			@ApiResponse(code = 200, message = MessageConstant.EMPLOYEE_DETAILS_AVAILABLE, response = UserDTO.class),
+			@ApiResponse(code = 400, message = MessageConstant.EMPLOYEE_DETAILS_NOT_AVAILABLE, response = Message.class)
 	})
 	public ResponseEntity<Object> findById(@PathVariable int id) {
-		Admin adminResponseObj = null;
+		Employee employeeResponseObj = null;
 		try
 		{
-			adminResponseObj = adminServiceObj.findById(id);
+			employeeResponseObj = employeeServiceObj.findById(id);
 			UserDTO userDTO = new UserDTO();
-			userDTO.setEmail(adminResponseObj.getEmail());
-			userDTO.setName(adminResponseObj.getName());
-			userDTO.setId(adminResponseObj.getId());
+			userDTO.setEmail(employeeResponseObj.getEmail());
+			userDTO.setName(employeeResponseObj.getName());
+			userDTO.setId(employeeResponseObj.getId());
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch(EntityNotFoundException e)
 		{
-			Message message = new Message(MessageConstant.DONOR_DETAILS_NOT_AVAILABLE);
+			Message message = new Message(MessageConstant.USER_DETAILS_NOT_AVAILABLE);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -129,14 +129,14 @@ public class AdminController {
 	@GetMapping("/{id}/validate")
 	@ApiOperation("Validate Admin")
 	@ApiResponses(value= {
-			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = Boolean.class),
-			@ApiResponse(code = 400, message  = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Boolean.class)
+			@ApiResponse(code = 200, message = MessageConstant.EMPLOYEE_DETAILS_AVAILABLE, response = Boolean.class),
+			@ApiResponse(code = 400, message  = MessageConstant.EMPLOYEE_DETAILS_NOT_AVAILABLE, response = Boolean.class)
 	})
-	public Boolean validateAdmin(@PathVariable int id)
+	public Boolean validateEmployee(@PathVariable int id)
 	{
 		Boolean isValid = true;
 		try {
-			adminServiceObj.findById(id);
+			employeeServiceObj.findById(id);
 		}
 		catch(EntityNotFoundException e)
 		{
@@ -151,17 +151,17 @@ public class AdminController {
 	@GetMapping("/list")
 	@ApiOperation("List Admin Details")
 	@ApiResponses(value= {
-			@ApiResponse(code = 200, message = MessageConstant.ADMIN_DETAILS_AVAILABLE, response = UserDTO.class),
-			@ApiResponse(code = 400, message  = MessageConstant.ADMIN_DETAILS_NOT_AVAILABLE, response = Message.class)
+			@ApiResponse(code = 200, message = MessageConstant.EMPLOYEE_DETAILS_AVAILABLE, response = UserDTO.class),
+			@ApiResponse(code = 400, message  = MessageConstant.EMPLOYEE_DETAILS_NOT_AVAILABLE, response = Message.class)
 	})
-	public ResponseEntity<Object> listAdminDetails()
+	public ResponseEntity<Object> listEmployeeDetails()
 	{
-		List<Admin> list = null;
+		List<Employee> list = null;
 		List<UserDTO> listDTO = new ArrayList<UserDTO>();
 		String errorMessage = null;
 		try {
-			list = adminServiceObj.listAdminDetails();
-			for(Admin admin : list)
+			list = employeeServiceObj.listAdminDetails();
+			for(Employee admin : list)
 			{
 				UserDTO userDTO = new UserDTO();
 				userDTO.setEmail(admin.getEmail());
@@ -184,12 +184,12 @@ public class AdminController {
 	@GetMapping("/forgotpassword")
 	@ApiOperation("Forgot password")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = MessageConstant.DONOR_DETAILS_AVAILABLE, response = Message.class),
-			@ApiResponse(code = 400, message = MessageConstant.DONOR_DETAILS_NOT_AVAILABLE, response = Message.class) })
+			@ApiResponse(code = 200, message = MessageConstant.USER_DETAILS_AVAILABLE, response = Message.class),
+			@ApiResponse(code = 400, message = MessageConstant.USER_DETAILS_NOT_AVAILABLE, response = Message.class) })
 	public ResponseEntity<Object> forgotPassword(@RequestParam String email) {
-		Admin adminResponseObj = null;
-		adminResponseObj = adminServiceObj.findByEmail(email);
-		if (adminResponseObj != null) {
+		Employee employeeResponseObj = null;
+		employeeResponseObj = employeeServiceObj.findByEmail(email);
+		if (employeeResponseObj != null) {
 			Message message = new Message(MessageConstant.MAIL_HAS_BEEN_SEND);
 			return new ResponseEntity<>(message, HttpStatus.OK);
 		} else {

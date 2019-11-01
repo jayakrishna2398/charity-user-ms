@@ -11,8 +11,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "admin")
-public class Admin {
+@Table(name = "users")
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -23,4 +23,10 @@ public class Admin {
 	private String email;
 	@Column(name = "password")
 	private String password;
+	@Column(name="active")
+	private Boolean active;
+	@Column(name="locked")
+	private Boolean locked;
+	@Column(name="blocked")
+	private Boolean blocked;
 }

@@ -1,0 +1,12 @@
+CREATE TABLE employees (
+	id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(20) NOT NULL,
+    role VARCHAR(10),
+ 	active BOOLEAN DEFAULT FALSE,
+ 	locked BOOLEAN DEFAULT FALSE,
+ 	blocked BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY(id),
+    UNIQUE(email)
+);

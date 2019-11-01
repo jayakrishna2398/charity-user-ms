@@ -11,8 +11,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "donor")
-public class Donor {
+@Table(name = "employees")
+public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -23,4 +23,10 @@ public class Donor {
 	private String email;
 	@Column(name = "password")
 	private String password;
+	@Column(name="active")
+	private Boolean active;
+	@Column(name="locked")
+	private Boolean locked;
+	@Column(name="blocked")
+	private Boolean blocked;
 }

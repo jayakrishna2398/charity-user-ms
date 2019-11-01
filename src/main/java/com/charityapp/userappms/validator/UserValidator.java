@@ -8,20 +8,20 @@ import org.springframework.util.StringUtils;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ValidatorException;
-import com.charityapp.userappms.model.Donor;
-import com.charityapp.userappms.repository.DonorRepository;
+import com.charityapp.userappms.model.User;
+import com.charityapp.userappms.repository.UserRepository;
 import com.charityapp.userappms.util.MessageConstant;
 
 
 
 @Component
-public class DonorValidator {
+public class UserValidator {
 	
 	@Autowired
-	private DonorRepository donorRepo;
+	private UserRepository userRepo;
 	
 	
-	public void donorLoginValidator(LoginDTO loginDTO) throws ValidatorException
+	public void userLoginValidator(LoginDTO loginDTO) throws ValidatorException
 	{	
 		
 		if(StringUtils.isEmpty(loginDTO.getEmail()))
@@ -36,7 +36,7 @@ public class DonorValidator {
 		}
 	}
 	
-	public void donorRegisterValidator(RegisterDTO registerDTO) throws ValidatorException
+	public void userRegisterValidator(RegisterDTO registerDTO) throws ValidatorException
 	{
 		String email = registerDTO.getEmail();
 		String password = registerDTO.getPassword();
@@ -57,9 +57,9 @@ public class DonorValidator {
 		}
 		
 		//Prepare get donor details based on email
-		Donor donorResponseObj = donorRepo.findByEmail(email);
+		User userResponseObj = userRepo.findByEmail(email);
 		
-		if(donorResponseObj != null)
+		if(userResponseObj != null)
 		{
 			throw new ValidatorException(MessageConstant.EMAIL_EXIST);
 		}

@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.exception.ValidatorException;
-import com.charityapp.userappms.model.Admin;
-import com.charityapp.userappms.repository.AdminRepository;
+import com.charityapp.userappms.model.Employee;
+import com.charityapp.userappms.repository.EmployeeRepository;
 import com.charityapp.userappms.util.MessageConstant;
 
 @Component
-public class AdminValidator {
+public class EmployeeValidator {
 	
 	@Autowired
-	private AdminRepository adminRepo;
+	private EmployeeRepository adminRepo;
 	/**
 	 * Get instance of donor validator class 
 	**/
@@ -53,7 +53,7 @@ public class AdminValidator {
 		}
 		
 		//Prepare get donor details based on email
-				Admin adminResponseObj = adminRepo.findByEmail(email);
+				Employee adminResponseObj = adminRepo.findByEmail(email);
 				
 				if(adminResponseObj != null)
 				{
