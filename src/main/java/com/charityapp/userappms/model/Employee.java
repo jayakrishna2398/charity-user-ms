@@ -1,5 +1,7 @@
 package com.charityapp.userappms.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,9 +26,13 @@ public class Employee {
 	@Column(name = "password")
 	private String password;
 	@Column(name="active")
-	private Boolean active;
+	private Boolean active = false;
 	@Column(name="locked")
-	private Boolean locked;
+	private Boolean locked = false;
 	@Column(name="blocked")
-	private Boolean blocked;
+	private Boolean blocked = false;
+	@Column(name="created_date")
+	private LocalDate createdDate = LocalDate.now();
+	@Column(name="modified_date")
+	private LocalDate modifiedDate = LocalDate.now();
 }
