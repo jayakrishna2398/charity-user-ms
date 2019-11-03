@@ -10,4 +10,8 @@ public class ServiceException extends Exception {
 	{
 		super(serviceException);
 	}
+	public ServiceException(String serviceException, Throwable t)
+	{
+		super(serviceException, t);
+	}
 }

@@ -1,4 +1,4 @@
-package com.charityapp.userappms.client;
+package com.charityapp.userappms.service;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.charityapp.userappms.client.MailClient;
 import com.charityapp.userappms.dto.ForgotPasswordDTO;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.MailDTO;
@@ -114,7 +115,17 @@ public class UserService {
 		int responseObj = userRepoObj.updateStatus(isActive,userId);
 		if(responseObj == 0)
 		{
-			throw new ServiceException(MessageConstant.UNABLE_TO_ACTIVATE);
+			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATE_ACTIVE_STATUS);
+		}
+	}
+	@Transactional
+	public void updateAccountLockStatus(int userId,UserStatusDTO statusDTO) throws ServiceException
+	{
+		Boolean isActive = statusDTO.getActive();
+		int responseObj = userRepoObj.updateAccountLock(isActive,userId);
+		if(responseObj == 0)
+		{
+			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATED_LOCK_STATUS);
 		}
 	}
 }

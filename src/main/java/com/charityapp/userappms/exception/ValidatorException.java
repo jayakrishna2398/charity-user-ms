@@ -10,4 +10,8 @@ public class ValidatorException extends Exception {
 	{
 		super(exceptionMessage);
 	}
+	public ValidatorException(String exceptionMessage, Throwable t)
+	{
+		super(exceptionMessage, t);
+	}
 }

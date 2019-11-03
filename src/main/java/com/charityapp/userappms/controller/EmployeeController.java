@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.charityapp.userappms.client.EmployeeService;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.dto.UserDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.model.Employee;
+import com.charityapp.userappms.service.EmployeeService;
 import com.charityapp.userappms.util.Message;
 import com.charityapp.userappms.util.MessageConstant;
 
@@ -32,6 +34,8 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/admin")
 public class EmployeeController {
+	
+	Logger logger = LoggerFactory.getLogger(MessageConstant.EMPLOYEE_CONTROLLER);
 
 	@Autowired
 	private EmployeeService employeeServiceObj;
@@ -59,6 +63,7 @@ public class EmployeeController {
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch(ServiceException e)
 		{
+			logger.error(MessageConstant.ERROR_INFO, e);
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
@@ -88,6 +93,7 @@ public class EmployeeController {
 			userDTO.setId(employeeResponseObj.getId());
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch (ServiceException e) {
+			logger.error(MessageConstant.ERROR_INFO, e);
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
@@ -116,6 +122,7 @@ public class EmployeeController {
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
 		} catch(EntityNotFoundException e)
 		{
+			logger.error(MessageConstant.ERROR_INFO, e);
 			Message message = new Message(MessageConstant.USER_DETAILS_NOT_AVAILABLE);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
@@ -140,6 +147,7 @@ public class EmployeeController {
 		}
 		catch(EntityNotFoundException e)
 		{
+			logger.error(MessageConstant.ERROR_INFO, e);
 			isValid = false;
 		}
 		return isValid;
@@ -171,6 +179,7 @@ public class EmployeeController {
 			}
 			return new ResponseEntity<>(listDTO, HttpStatus.OK);
 		} catch (ServiceException e) {
+			logger.error(MessageConstant.ERROR_INFO, e);
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);

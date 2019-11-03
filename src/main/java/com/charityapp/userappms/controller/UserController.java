@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.charityapp.userappms.client.UserService;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.dto.UserDTO;
 import com.charityapp.userappms.dto.UserStatusDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.model.User;
+import com.charityapp.userappms.service.UserService;
 import com.charityapp.userappms.util.Message;
 import com.charityapp.userappms.util.MessageConstant;
 
@@ -40,9 +40,10 @@ public class UserController {
 
 	/**
 	 * User login
+	 * 
 	 * @param email and password
 	 * @return user details if login success or else invalid credential.
-	 * **/
+	 **/
 	@PostMapping("/login")
 	@ApiOperation("Donor Login")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = UserDTO.class),
@@ -66,10 +67,11 @@ public class UserController {
 
 	/**
 	 * User register
+	 * 
 	 * @param name,email, and password
 	 * @return user details if register success or else invalid credential.
-	 * **/
-	@PostMapping("/register") //todo: fix rest url
+	 **/
+	@PostMapping("/register") // todo: fix rest url
 	@ApiOperation("Donor Register")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = MessageConstant.LOGIN_SUCCESS, response = UserDTO.class),
 			@ApiResponse(code = 400, message = MessageConstant.INVALID_CREDENTIAL, response = Message.class) })
@@ -92,9 +94,10 @@ public class UserController {
 
 	/**
 	 * Display user details based on id
+	 * 
 	 * @param id
 	 * @return user details if id is exist or else user details not available.
-	 * **/
+	 **/
 	@GetMapping("/{id}")
 	@ApiOperation("Find By Id")
 	@ApiResponses(value = {
@@ -109,8 +112,7 @@ public class UserController {
 			userDTO.setName(userResponseObj.getName());
 			userDTO.setId(userResponseObj.getId());
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);
-		} catch(EntityNotFoundException e)
-		{
+		} catch (EntityNotFoundException e) {
 			Message message = new Message(MessageConstant.USER_DETAILS_NOT_AVAILABLE);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
@@ -118,9 +120,10 @@ public class UserController {
 
 	/**
 	 * forgot password
+	 * 
 	 * @param email
 	 * @return user password if email is exist or else user details not available.
-	 * **/
+	 **/
 	@GetMapping("/forgotpassword")
 	@ApiOperation("Forgot password")
 	@ApiResponses(value = {
@@ -137,34 +140,33 @@ public class UserController {
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * List user details
-	 * @return user details until get an exception or else user details not available.
-	 * **/
+	 * 
+	 * @return user details until get an exception or else user details not
+	 *         available.
+	 **/
 	@GetMapping("/list") // todo: fix url
 	@ApiOperation("List Donor Details")
-	@ApiResponses(value= {
+	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = MessageConstant.USER_DETAILS_AVAILABLE, response = UserDTO.class),
-			@ApiResponse(code = 400, message  = MessageConstant.USER_DETAILS_NOT_AVAILABLE, response = Message.class)
-	})
-	public ResponseEntity<Object> listDonorDetails()
-	{
+			@ApiResponse(code = 400, message = MessageConstant.USER_DETAILS_NOT_AVAILABLE, response = Message.class) })
+	public ResponseEntity<Object> listDonorDetails() {
 		List<User> list = null;
-		
+
 		String errorMessage = null;
 		try {
 			list = donorService.listDonorDetails();
 			List<UserDTO> listDTO = new ArrayList<UserDTO>();
-			for(User donor : list)
-			{
+			for (User donor : list) {
 				UserDTO userDTO = new UserDTO();
 				userDTO.setEmail(donor.getEmail());
 				userDTO.setName(donor.getName());
 				userDTO.setId(donor.getId());
 				listDTO.add(userDTO);
 			}
-			
+
 			return new ResponseEntity<>(listDTO, HttpStatus.OK);
 		} catch (ServiceException e) {
 			errorMessage = e.getMessage();
@@ -172,26 +174,45 @@ public class UserController {
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@PatchMapping("/{id}/updateStatus")
 	@ApiOperation("Activate user")
-	@ApiResponses(value= {
-			@ApiResponse(code = 200, message = MessageConstant.ACTIVATE_SUCCESS, response = UserDTO.class),
-			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_ACTIVATE, response = Message.class)
-	})
-	public ResponseEntity<Object> updateUserStatus(@PathVariable("id") Integer id, @RequestBody UserStatusDTO statusDTO)
-	{
-		
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_ACTIVE_STATUS_UPDATED, response = UserDTO.class),
+			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATE_ACTIVE_STATUS, response = Message.class) })
+	public ResponseEntity<Object> updateUserStatus(@PathVariable("id") Integer id,
+			@RequestBody UserStatusDTO statusDTO) {
+
 		String errorMessage = null;
 		try {
-			donorService.updateUserStatus(id,statusDTO);
-			
+			donorService.updateUserStatus(id, statusDTO);
+
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (ServiceException e) {
 			errorMessage = e.getMessage();
 			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
-		
+
+	}
+
+	@PatchMapping("/{id}/updateLockStatus")
+	@ApiOperation("Activate user")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_LOCK_STATUS_UPDATED, response = UserDTO.class),
+			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATED_LOCK_STATUS, response = Message.class) })
+	public ResponseEntity<Object> updateAcountLockStatus(@PathVariable("id") Integer id,
+			@RequestBody UserStatusDTO statusDTO) {
+
+		String errorMessage = null;
+		try {
+			donorService.updateAccountLockStatus(id, statusDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+
 	}
 }

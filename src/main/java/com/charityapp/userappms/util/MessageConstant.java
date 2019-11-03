@@ -18,4 +18,10 @@ public final class MessageConstant {
 	public static final String INVALID_EMAIL_OR_PASSWORD = "Invalid email or Password";
 	public static final String UNABLE_TO_ACTIVATE = "Unable to activate";
 	public static final String ACTIVATE_SUCCESS = "Activate Success";
+	public static final String ERROR_INFO = "Error info";
+	public static final String EMPLOYEE_CONTROLLER = "Employee controller";
+	public static final String ACCOUNT_ACTIVE_STATUS_UPDATED = "Account active status updated";
+	public static final String UNABLE_TO_UPDATE_ACTIVE_STATUS = "Unable to updated account status";
+	public static final String ACCOUNT_LOCK_STATUS_UPDATED = "Account lock status updated";
+	public static final String UNABLE_TO_UPDATED_LOCK_STATUS = "Unable to update lock status";
 }
