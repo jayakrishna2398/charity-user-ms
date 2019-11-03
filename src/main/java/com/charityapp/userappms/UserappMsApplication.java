@@ -11,7 +11,7 @@ public class UserappMsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UserappMsApplication.class, args);
 	}
-	
+
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();

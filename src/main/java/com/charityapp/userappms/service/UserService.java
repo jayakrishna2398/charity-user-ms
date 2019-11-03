@@ -57,9 +57,9 @@ public class UserService {
 			donorObj.setName(registerDTO.getName());
 			donorObj.setEmail(registerDTO.getEmail());
 			donorObj.setPassword(registerDTO.getPassword());
-			
-			 String activationCode = RandomStringUtils.randomAlphabetic(10);
-			 donorObj.setName(activationCode); //todo: remove this
+
+			String activationCode = RandomStringUtils.randomAlphabetic(10);
+			donorObj.setName(activationCode); // todo: remove this
 			donorValidator.userRegisterValidator(registerDTO);
 			userResponseObj = userRepoObj.save(donorObj);
 			// Mail service
@@ -86,7 +86,7 @@ public class UserService {
 	public User findByEmail(final String email) {
 		User donorResponse = null;
 		donorResponse = userRepoObj.findByEmail(email);
-		//Prepare message and to address
+		// Prepare message and to address
 		StringBuilder sb = new StringBuilder();
 		sb.append("Dear user,");
 		sb.append("Your Password is,").append(donorResponse.getPassword());
@@ -94,47 +94,43 @@ public class UserService {
 		ForgotPasswordDTO mailDTO = new ForgotPasswordDTO();
 		mailDTO.setTo(donorResponse.getEmail());
 		mailDTO.setText(sb.toString());
-		//Send mail to user
+		// Send mail to user
 		mailService.sendMailToUser(mailDTO);
 		return donorResponse;
 	}
-	public List<User> listDonorDetails() throws ServiceException
-	{
+
+	public List<User> listDonorDetails() throws ServiceException {
 		List<User> list = null;
 		list = userRepoObj.findAll();
-		if(list.isEmpty())
-		{
+		if (list.isEmpty()) {
 			throw new ServiceException(MessageConstant.USER_DETAILS_NOT_AVAILABLE);
 		}
 		return list;
 	}
+
 	@Transactional
-	public void updateUserStatus(int userId,UserStatusDTO statusDTO) throws ServiceException
-	{
+	public void updateUserStatus(int userId, UserStatusDTO statusDTO) throws ServiceException {
 		Boolean isActive = statusDTO.getActive();
-		int responseObj = userRepoObj.updateStatus(isActive,userId);
-		if(responseObj == 0)
-		{
+		int responseObj = userRepoObj.updateStatus(isActive, userId);
+		if (responseObj == 0) {
 			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATE_ACTIVE_STATUS);
 		}
 	}
+
 	@Transactional
-	public void updateAccountLockStatus(int userId,UserStatusDTO statusDTO) throws ServiceException
-	{
+	public void updateAccountLockStatus(int userId, UserStatusDTO statusDTO) throws ServiceException {
 		Boolean isActive = statusDTO.getActive();
-		int responseObj = userRepoObj.updateAccountLock(isActive,userId);
-		if(responseObj == 0)
-		{
+		int responseObj = userRepoObj.updateAccountLock(isActive, userId);
+		if (responseObj == 0) {
 			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATED_LOCK_STATUS);
 		}
 	}
+
 	@Transactional
-	public void updateAccountBlockStatus(int userId,UserStatusDTO statusDTO) throws ServiceException
-	{
+	public void updateAccountBlockStatus(int userId, UserStatusDTO statusDTO) throws ServiceException {
 		Boolean isActive = statusDTO.getActive();
-		int responseObj = userRepoObj.updateAccountBlock(isActive,userId);
-		if(responseObj == 0)
-		{
+		int responseObj = userRepoObj.updateAccountBlock(isActive, userId);
+		if (responseObj == 0) {
 			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATED_BLOCK_STATUS);
 		}
 	}

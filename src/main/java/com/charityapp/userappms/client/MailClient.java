@@ -15,9 +15,8 @@ public class MailClient {
 	@Value("${mail_enabled}")
 	private Boolean mailEnabled;
 
-
 	private String apiUrl = "https://charity-notification.herokuapp.com";
-	
+
 	@Autowired
 	RestTemplate restTemplate;
 

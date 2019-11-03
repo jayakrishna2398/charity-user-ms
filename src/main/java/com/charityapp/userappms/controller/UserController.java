@@ -215,7 +215,7 @@ public class UserController {
 		}
 
 	}
-	
+
 	@PatchMapping("/{id}/updateBlockStatus")
 	@ApiOperation("Activate user")
 	@ApiResponses(value = {

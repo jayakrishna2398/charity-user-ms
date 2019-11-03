@@ -11,8 +11,7 @@ import com.charityapp.userappms.model.Employee;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	@Query(" FROM Employee e WHERE e.email = :email AND e.password = :password")
 	Employee findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
+
 	@Query(" From Employee e WHERE e.email = :email")
-	Employee findByEmail(
-			@Param("email") String email
-			);
+	Employee findByEmail(@Param("email") String email);
 }
