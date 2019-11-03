@@ -102,7 +102,7 @@ public class UserService {
 	{
 		List<User> list = null;
 		list = userRepoObj.findAll();
-		if(list == null)
+		if(list.isEmpty())
 		{
 			throw new ServiceException(MessageConstant.USER_DETAILS_NOT_AVAILABLE);
 		}
@@ -126,6 +126,16 @@ public class UserService {
 		if(responseObj == 0)
 		{
 			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATED_LOCK_STATUS);
+		}
+	}
+	@Transactional
+	public void updateAccountBlockStatus(int userId,UserStatusDTO statusDTO) throws ServiceException
+	{
+		Boolean isActive = statusDTO.getActive();
+		int responseObj = userRepoObj.updateAccountBlock(isActive,userId);
+		if(responseObj == 0)
+		{
+			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATED_BLOCK_STATUS);
 		}
 	}
 }

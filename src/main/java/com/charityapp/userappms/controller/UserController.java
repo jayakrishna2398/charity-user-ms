@@ -215,4 +215,24 @@ public class UserController {
 		}
 
 	}
+	
+	@PatchMapping("/{id}/updateBlockStatus")
+	@ApiOperation("Activate user")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_BLOCK_STATUS_UPDATED, response = UserDTO.class),
+			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATED_BLOCK_STATUS, response = Message.class) })
+	public ResponseEntity<Object> updateAcountBlockStatus(@PathVariable("id") Integer id,
+			@RequestBody UserStatusDTO statusDTO) {
+
+		String errorMessage = null;
+		try {
+			donorService.updateAccountBlockStatus(id, statusDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }
