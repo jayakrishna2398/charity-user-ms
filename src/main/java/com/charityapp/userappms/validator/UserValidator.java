@@ -52,7 +52,7 @@ public class UserValidator {
 		}
 
 	}
-	
+
 	public void userUpdateValidator(UserUpdateDTO updateDTO) throws ValidatorException {
 		String email = updateDTO.getEmail();
 		String password = updateDTO.getPassword();
