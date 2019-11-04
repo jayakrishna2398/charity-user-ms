@@ -166,6 +166,7 @@ public class UserController {
 				userDTO.setEmail(donor.getEmail());
 				userDTO.setName(donor.getName());
 				userDTO.setId(donor.getId());
+				userDTO.setActive(donor.getActive());
 				listDTO.add(userDTO);
 			}
 

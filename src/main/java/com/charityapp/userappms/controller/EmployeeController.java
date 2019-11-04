@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.dto.UserDTO;
+import com.charityapp.userappms.dto.UserUpdateDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.model.Employee;
 import com.charityapp.userappms.service.EmployeeService;
@@ -55,7 +57,7 @@ public class EmployeeController {
 		Employee employeeResponseObj = null;
 		String errorMessage = null;
 		try {
-			employeeResponseObj = employeeServiceObj.adminLogin(loginDTO);
+			employeeResponseObj = employeeServiceObj.employeeLogin(loginDTO);
 			UserDTO userDTO = new UserDTO();
 			userDTO.setEmail(employeeResponseObj.getEmail());
 			userDTO.setName(employeeResponseObj.getName());
@@ -86,7 +88,7 @@ public class EmployeeController {
 		Employee employeeResponseObj = null;
 		String errorMessage = null;
 		try {
-			employeeResponseObj = employeeServiceObj.adminRegister(registerDTO);
+			employeeResponseObj = employeeServiceObj.employeeRegister(registerDTO);
 			UserDTO userDTO = new UserDTO();
 			userDTO.setEmail(employeeResponseObj.getEmail());
 			userDTO.setName(employeeResponseObj.getName());
@@ -203,6 +205,30 @@ public class EmployeeController {
 			return new ResponseEntity<>(message, HttpStatus.OK);
 		} else {
 			Message message = new Message(MessageConstant.MAIL_HAS_BEEN_NOT_SEND);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	/**
+	 * Update user details
+	 * @param name, email, and password
+	 * return user details update success if update success or unable to update user details
+	 * **/
+	@PatchMapping("/{id}/updateEmployeeDetails")
+	@ApiOperation("Update User Details")
+	@ApiResponses(value= {
+			@ApiResponse(code = 200, message = MessageConstant.USER_DETAILS_UPDATE_SUCCESS, response = Message.class),
+			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATE_USER_DETAILS, response = Message.class)
+	})
+	public ResponseEntity<Object> updateEmployeeDetails(@PathVariable("id") Integer id,UserUpdateDTO updateDTO)
+	{
+		String errorMessage = null;
+		try {
+			employeeServiceObj.updateEmployeeDetails(id, updateDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 	}

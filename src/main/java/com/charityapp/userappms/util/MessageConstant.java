@@ -28,4 +28,7 @@ public final class MessageConstant {
 	public static final String UNABLE_TO_UPDATED_BLOCK_STATUS = "Unable to update block status";
 	public static final String USER_DETAILS_UPDATE_SUCCESS = "User details update success";
 	public static final String UNABLE_TO_UPDATE_USER_DETAILS = "Unable to update user details";
+	public static final String EMPLOYEE_DETAILS_UPDATE_SUCCESS = "Employee details update success";
+	public static final String UNABLE_TO_UPDATE_EMPLOYEE_DETAILS = "Unable to update user details";
+	public static final String UNABLE_TO_UPDATE = "Unable to update";
 }

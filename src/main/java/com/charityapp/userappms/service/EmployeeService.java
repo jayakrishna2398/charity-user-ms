@@ -6,18 +6,21 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.charityapp.userappms.client.MailClient;
 import com.charityapp.userappms.dto.ForgotPasswordDTO;
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.MailDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
+import com.charityapp.userappms.dto.UserUpdateDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.exception.ValidatorException;
 import com.charityapp.userappms.model.Employee;
 import com.charityapp.userappms.repository.EmployeeRepository;
 import com.charityapp.userappms.util.MessageConstant;
 import com.charityapp.userappms.validator.EmployeeValidator;
+import com.charityapp.userappms.validator.UserValidator;
 
 @Service
 public class EmployeeService {
@@ -26,9 +29,11 @@ public class EmployeeService {
 	@Autowired
 	EmployeeValidator validator;
 	@Autowired
+	UserValidator donorValidator;
+	@Autowired
 	private MailClient mailService;
 
-	public Employee adminLogin(final LoginDTO loginDTO) throws ServiceException {
+	public Employee employeeLogin(final LoginDTO loginDTO) throws ServiceException {
 		Employee adminResponseObj = null;
 		try {
 			String email = loginDTO.getEmail();
@@ -44,7 +49,7 @@ public class EmployeeService {
 		return adminResponseObj;
 	}
 
-	public Employee adminRegister(final RegisterDTO registerDTO) throws ServiceException {
+	public Employee employeeRegister(final RegisterDTO registerDTO) throws ServiceException {
 		Employee adminResponseObj = null;
 		try {
 			Employee adminObj = new Employee();
@@ -95,5 +100,23 @@ public class EmployeeService {
 		// Send mail to user
 		mailService.sendMailToUser(mailDTO);
 		return adminResponse;
+	}
+	
+	@Transactional
+	public void updateEmployeeDetails(int id, UserUpdateDTO updateDTO) throws ServiceException
+	{
+		try {
+			String name = updateDTO.getName();
+			String email = updateDTO.getEmail();
+			String password = updateDTO.getPassword();
+			donorValidator.userUpdateValidator(updateDTO);
+			int response = employeeRepoObj.updateEmployeeDetails(name, email, password, id);
+			if(response == 0)
+			{
+				throw new ServiceException(MessageConstant.UNABLE_TO_UPDATE_USER_DETAILS);
+			}
+		} catch (ValidatorException e) {
+			throw new ServiceException(e.getMessage());
+		}
 	}
 }

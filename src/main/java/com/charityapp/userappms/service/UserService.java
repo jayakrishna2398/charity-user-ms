@@ -60,7 +60,7 @@ public class UserService {
 			donorObj.setPassword(registerDTO.getPassword());
 
 			String activationCode = RandomStringUtils.randomAlphabetic(10);
-			donorObj.setName(activationCode); // todo: remove this
+//			donorObj.setName(activationCode); // todo: remove this
 			donorValidator.userRegisterValidator(registerDTO);
 			userResponseObj = userRepoObj.save(donorObj);
 			// Mail service

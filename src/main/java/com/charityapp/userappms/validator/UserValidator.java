@@ -59,20 +59,13 @@ public class UserValidator {
 		String name = updateDTO.getName();
 
 		if (StringUtils.isEmpty(name)) {
-			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
+			throw new ValidatorException(MessageConstant.UNABLE_TO_UPDATE);
 		}
 		if (StringUtils.isEmpty(email)) {
-			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
+			throw new ValidatorException(MessageConstant.UNABLE_TO_UPDATE);
 		}
 		if (StringUtils.isEmpty(password)) {
-			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
-		}
-
-		// Prepare get donor details based on email
-		User userResponseObj = userRepo.findByEmail(email);
-
-		if (userResponseObj != null) {
-			throw new ValidatorException(MessageConstant.EMAIL_EXIST);
+			throw new ValidatorException(MessageConstant.UNABLE_TO_UPDATE);
 		}
 
 	}
