@@ -51,7 +51,7 @@ public class EmployeeValidator {
 		Employee adminResponseObj = adminRepo.findByEmail(email);
 
 		if (adminResponseObj != null) {
-			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
+			throw new ValidatorException(MessageConstant.EMAIL_EXIST);
 		}
 	}
 }
