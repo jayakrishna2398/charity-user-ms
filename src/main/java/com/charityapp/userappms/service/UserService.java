@@ -15,6 +15,7 @@ import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.MailDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.dto.UserStatusDTO;
+import com.charityapp.userappms.dto.UserUpdateDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.exception.ValidatorException;
 import com.charityapp.userappms.model.User;
@@ -111,8 +112,8 @@ public class UserService {
 	@Transactional
 	public void updateUserStatus(int userId, UserStatusDTO statusDTO) throws ServiceException {
 		Boolean isActive = statusDTO.getActive();
-		int responseObj = userRepoObj.updateStatus(isActive, userId);
-		if (responseObj == 0) {
+		int response = userRepoObj.updateStatus(isActive, userId);
+		if (response == 0) {
 			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATE_ACTIVE_STATUS);
 		}
 	}
@@ -129,9 +130,27 @@ public class UserService {
 	@Transactional
 	public void updateAccountBlockStatus(int userId, UserStatusDTO statusDTO) throws ServiceException {
 		Boolean isActive = statusDTO.getActive();
-		int responseObj = userRepoObj.updateAccountBlock(isActive, userId);
-		if (responseObj == 0) {
+		int response = userRepoObj.updateAccountBlock(isActive, userId);
+		if (response == 0) {
 			throw new ServiceException(MessageConstant.UNABLE_TO_UPDATED_BLOCK_STATUS);
+		}
+	}
+	
+	@Transactional
+	public void updateUserDetails(int id, UserUpdateDTO updateDTO) throws ServiceException
+	{
+		try {
+			String name = updateDTO.getName();
+			String email = updateDTO.getEmail();
+			String password = updateDTO.getPassword();
+			donorValidator.userUpdateValidator(updateDTO);
+			int response = userRepoObj.updateUserDetails(name, email, password, id);
+			if(response == 0)
+			{
+				throw new ServiceException(MessageConstant.UNABLE_TO_UPDATE_USER_DETAILS);
+			}
+		} catch (ValidatorException e) {
+			throw new ServiceException(e.getMessage());
 		}
 	}
 }

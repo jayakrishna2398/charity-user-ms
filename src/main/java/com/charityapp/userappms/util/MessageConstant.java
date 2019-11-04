@@ -26,4 +26,6 @@ public final class MessageConstant {
 	public static final String UNABLE_TO_UPDATED_LOCK_STATUS = "Unable to update lock status";
 	public static final String ACCOUNT_BLOCK_STATUS_UPDATED = "Account block status updated";
 	public static final String UNABLE_TO_UPDATED_BLOCK_STATUS = "Unable to update block status";
+	public static final String USER_DETAILS_UPDATE_SUCCESS = "User details update success";
+	public static final String UNABLE_TO_UPDATE_USER_DETAILS = "Unable to update user details";
 }

@@ -38,20 +38,20 @@ public class EmployeeValidator {
 		String password = registerDTO.getPassword();
 
 		if (name == null || "".equals(name)) {
-			throw new ValidatorException(MessageConstant.INVALID_USERNAME);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 		if (email == null || "".equals(email)) {
-			throw new ValidatorException(MessageConstant.INVALID_EMAIL);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 		if (password == null || "".equals(password)) {
-			throw new ValidatorException(MessageConstant.INVALID_PASSWORD);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 
 		// Prepare get donor details based on email
 		Employee adminResponseObj = adminRepo.findByEmail(email);
 
 		if (adminResponseObj != null) {
-			throw new ValidatorException(MessageConstant.EMAIL_EXIST);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 	}
 }

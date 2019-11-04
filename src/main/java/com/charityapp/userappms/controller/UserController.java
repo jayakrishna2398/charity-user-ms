@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
 import com.charityapp.userappms.dto.UserDTO;
 import com.charityapp.userappms.dto.UserStatusDTO;
+import com.charityapp.userappms.dto.UserUpdateDTO;
 import com.charityapp.userappms.exception.ServiceException;
 import com.charityapp.userappms.model.User;
 import com.charityapp.userappms.service.UserService;
@@ -175,10 +177,10 @@ public class UserController {
 		}
 	}
 
-	@PatchMapping("/{id}/updateStatus")
-	@ApiOperation("Activate user")
+	@PatchMapping("/{id}/updateActiveStatus")
+	@ApiOperation("Updated User Active Status")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_ACTIVE_STATUS_UPDATED, response = UserDTO.class),
+			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_ACTIVE_STATUS_UPDATED, response = Message.class),
 			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATE_ACTIVE_STATUS, response = Message.class) })
 	public ResponseEntity<Object> updateUserStatus(@PathVariable("id") Integer id,
 			@RequestBody UserStatusDTO statusDTO) {
@@ -197,9 +199,9 @@ public class UserController {
 	}
 
 	@PatchMapping("/{id}/updateLockStatus")
-	@ApiOperation("Activate user")
+	@ApiOperation("Updated User Lock Status")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_LOCK_STATUS_UPDATED, response = UserDTO.class),
+			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_LOCK_STATUS_UPDATED, response = Message.class),
 			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATED_LOCK_STATUS, response = Message.class) })
 	public ResponseEntity<Object> updateAcountLockStatus(@PathVariable("id") Integer id,
 			@RequestBody UserStatusDTO statusDTO) {
@@ -217,9 +219,9 @@ public class UserController {
 	}
 
 	@PatchMapping("/{id}/updateBlockStatus")
-	@ApiOperation("Activate user")
+	@ApiOperation("Updated User Block Status")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_BLOCK_STATUS_UPDATED, response = UserDTO.class),
+			@ApiResponse(code = 200, message = MessageConstant.ACCOUNT_BLOCK_STATUS_UPDATED, response = Message.class),
 			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATED_BLOCK_STATUS, response = Message.class) })
 	public ResponseEntity<Object> updateAcountBlockStatus(@PathVariable("id") Integer id,
 			@RequestBody UserStatusDTO statusDTO) {
@@ -234,5 +236,29 @@ public class UserController {
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 
+	}
+	
+	/**
+	 * Update user details
+	 * @param name, email, and password
+	 * return user details update success if update success or unable to update user details
+	 * **/
+	@PatchMapping("/{id}/updateUserDetails")
+	@ApiOperation("Update User Details")
+	@ApiResponses(value= {
+			@ApiResponse(code = 200, message = MessageConstant.USER_DETAILS_UPDATE_SUCCESS, response = Message.class),
+			@ApiResponse(code = 400, message = MessageConstant.UNABLE_TO_UPDATE_USER_DETAILS, response = Message.class)
+	})
+	public ResponseEntity<Object> updateUserDetails(@PathVariable("id") Integer id,UserUpdateDTO updateDTO)
+	{
+		String errorMessage = null;
+		try {
+			donorService.updateUserDetails(id, updateDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+			Message message = new Message(errorMessage);
+			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		}
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 
 import com.charityapp.userappms.dto.LoginDTO;
 import com.charityapp.userappms.dto.RegisterDTO;
+import com.charityapp.userappms.dto.UserUpdateDTO;
 import com.charityapp.userappms.exception.ValidatorException;
 import com.charityapp.userappms.model.User;
 import com.charityapp.userappms.repository.UserRepository;
@@ -34,13 +35,37 @@ public class UserValidator {
 		String name = registerDTO.getName();
 
 		if (StringUtils.isEmpty(name)) {
-			throw new ValidatorException(MessageConstant.INVALID_EMAIL);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 		if (StringUtils.isEmpty(email)) {
-			throw new ValidatorException(MessageConstant.INVALID_EMAIL);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 		if (StringUtils.isEmpty(password)) {
-			throw new ValidatorException(MessageConstant.INVALID_PASSWORD);
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
+		}
+
+		// Prepare get donor details based on email
+		User userResponseObj = userRepo.findByEmail(email);
+
+		if (userResponseObj != null) {
+			throw new ValidatorException(MessageConstant.EMAIL_EXIST);
+		}
+
+	}
+	
+	public void userUpdateValidator(UserUpdateDTO updateDTO) throws ValidatorException {
+		String email = updateDTO.getEmail();
+		String password = updateDTO.getPassword();
+		String name = updateDTO.getName();
+
+		if (StringUtils.isEmpty(name)) {
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
+		}
+		if (StringUtils.isEmpty(email)) {
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
+		}
+		if (StringUtils.isEmpty(password)) {
+			throw new ValidatorException(MessageConstant.INVALID_CREDENTIAL);
 		}
 
 		// Prepare get donor details based on email
