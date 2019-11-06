@@ -1,0 +1,12 @@
+---
+applications:
+- name: userapp-api.charityapp.in
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  memory: 1G
+  instances: 1
+  path: target/userapp-ms-0.0.1-SNAPSHOT.jar
+  env:
+    DB_HOST: db.charityapp.in
+    DB_NAME: charityapp_user_db
+    DB_USER: prod_user
+    DB_PASSWORD: prod_user
