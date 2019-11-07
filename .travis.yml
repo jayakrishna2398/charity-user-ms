@@ -3,8 +3,8 @@ language: java
 addons:
   sonarcloud:
     organization: "krishnawisely"
-    #token:
-     # secure: 584e849e517e4e59720f42f40a80206739f92078
+    token:
+      secure: 9f9bce244e86fc71b5e69232acc5352295fa959e
 cache:
   directories:
     - '$HOME/.m2/repository'
