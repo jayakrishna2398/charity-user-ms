@@ -2,7 +2,7 @@ language: java
 
 addons:
   sonarcloud:
-    organization: "krishnawisely-github"
+    organization: "krishnawisely"
     #token:
      # secure: 584e849e517e4e59720f42f40a80206739f92078
 cache:
